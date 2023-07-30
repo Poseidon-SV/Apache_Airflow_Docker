@@ -68,8 +68,7 @@ launch
 `> docker-compose up -d`
 Now all exp will be removed
 
-Now start coding
-dags> my_fst_dag.py
+## Now start coding: `dags> my_fst_dag.py`
 
 ## 1, 2, 3, 4, 5 (Follow from the files)
 
