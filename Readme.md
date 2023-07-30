@@ -71,3 +71,76 @@ Now all exp will be removed
 Now start coding
 dags> my_fst_dag.py
 
+## 1, 2, 3, 4, 5 (Follow from the files)
+
+## 6_dag_with_postgress_connection
+```yaml
+95|    volumes:
+96|     - postgres-db-volume:/var/lib/postgresql/data
+97|    ports:
+98|     - 54342:5432
+99|    healthcheck:
+```
+
+```cmd
+> docker-compose up -d --no-deps --build postgres
+```
+
+__Download DBeaver__
+- Select Postgres SQL
+- Create new SQL
+
+`6_dag_with_postgress_connection.py`
+
+## 7_Airflow_docker_install_python_pkgs
+__Create__ `requirements.txt`
+
+__ADD__ (pkgs)
+- scikit-learn
+
+__Create__ `Dockerfile`
+
+__Write__
+```
+FROM apache/airflow
+COPY requirements.txt /requirements.txt
+RUN pip install --user --upgrade pip
+RUN pip install --no-cache-dir --user -r /requirements.txt
+```
+
+```cmd
+> docker build . --tag extending_airflow:latest
+```
+
+__Change__ `docker-compose.yaml`
+```yaml
+53|  image: ${AIRFLOW_IMAGE_NAME:-extending_airflow:latest}
+54|  # build: .
+55|  environment:
+```
+__Ceate__ New DAG to verifiy `7_dag_with_python_pkgs.py`
+
+- Whenever we change the requiments.txt file we have to rebuild the docker image
+
+## 8 from images
+
+## 9_dag_with_postgres_hooks
+- Open DBeaver and connect to postgres DB
+- Create a table known as order (set a default DB `test.db`)
+```sql
+create table if not exists public.orders (
+    order_id character varying,
+    date date,
+    product_name character varying,
+    qunatity integer,
+    primary key (order_id)
+)
+
+select * from public.orders limit 100
+```
+__REFRESH__ the test.db in DBeaver app
+- Then import `orders.csv` by right clicking on `orders table` (match the colm name)
+
+__Create__ `9_dag_with_postgres_hooks.py`
+
+__WATCH THE VIDIO AGAIN [https://www.youtube.com/watch?v=K9AnJ9_ZAXE&t=6157s]__ 
